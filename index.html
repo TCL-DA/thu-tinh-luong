@@ -27,6 +27,7 @@ header{border-bottom:1px solid var(--rule2);background:var(--canvas)}
 .mark b{font-size:23px;font-weight:700;letter-spacing:-.01em}
 .mark span{font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:right}
 .lead{padding:0 var(--pad) 15px;font-size:15px;line-height:1.45;color:var(--muted)}
+.lead b{color:var(--ink);font-weight:700}
 nav{display:flex;border-top:1px solid var(--rule)}
 nav button{
   flex:1;background:none;border:0;border-right:1px solid var(--rule);
@@ -84,6 +85,13 @@ label.lb{display:block;font-size:13px;font-weight:700;letter-spacing:.07em;text-
 .chk .t s{display:block;text-decoration:none;font-size:13px;font-weight:500;color:var(--muted)}
 .chk .v{margin-left:auto;font-size:16px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
 
+.vd{border:2px solid var(--rule2);background:#fff;margin:0 var(--pad) 0;padding:14px 14px 12px}
+.vd .vh{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--carbon);color:#fff;display:inline-block;padding:4px 9px;margin-bottom:10px}
+.vd p{font-size:15.5px;line-height:1.5;margin-bottom:8px}
+.vd ul{margin:0 0 10px 19px}
+.vd li{font-size:15.5px;line-height:1.5;margin-bottom:4px}
+.vd li b{font-weight:700}
+.vd .ar{font-size:15.5px;line-height:1.5;font-weight:600;border-top:1px solid var(--rule);padding-top:10px;margin-bottom:12px}
 .grp{border:1px solid var(--rule);background:#fff;padding:12px;margin-bottom:10px}
 .grp .gh{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between}
 .grp .gh span{font-variant-numeric:tabular-nums}
@@ -132,7 +140,7 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
 <div class="wrap">
 <header>
   <div class="mark"><b>thử tính lương</b><span>bản thử<br>số tham khảo</span></div>
-  <p class="lead">Chọn ngạch, bậc và nhập số của tháng — trang tự cộng ra lương tạm tính. Số bạn nhập chỉ nằm trong máy bạn.</p>
+  <p class="lead"><b>Các ô đã điền sẵn số mẫu</b> — bạn chỉ cần chọn đúng ngạch, bậc rồi sửa lại các số cho đúng tháng của mình. Trang tự cộng ra lương tạm tính; số bạn nhập chỉ nằm trong máy bạn.</p>
   <nav role="tablist">
     <button role="tab" id="t1" aria-selected="true" onclick="tab(1)">Thử tính</button>
     <button role="tab" id="t2" aria-selected="false" onclick="tab(2)">Bảng &amp; cách tính</button>
@@ -140,6 +148,26 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
 </header>
 
 <section id="s1" class="on">
+
+  <div class="blk" style="padding-left:0;padding-right:0">
+    <div class="vd">
+      <span class="vh">Ví dụ mẫu</span>
+      <p>Trang đang tính sẵn một ví dụ để bạn dễ hình dung — <b>anh thợ A, tháng này:</b></p>
+      <ul>
+        <li>Ngạch <b>II – Thợ chính</b>, bậc <b>B3 – Vững nghề</b></li>
+        <li>Đi làm đủ <b>26 / 26 ngày</b></li>
+        <li>Làm được <b>145 điểm</b>, đơn giá tháng này <b>35.900 đ/điểm</b></li>
+        <li>Làm thêm <b>một nhóm công đoạn ngoài nghề</b>, đạt mức “Làm được”</li>
+        <li>Làm thêm <b>10 giờ ngày thường</b></li>
+        <li><b>4 bữa</b> không ăn tại chỗ, đi đủ công nên có <b>thưởng chuyên cần</b></li>
+      </ul>
+      <div class="ar">→ Kéo xuống cuối trang, bảng đen cho thấy từng khoản cộng ra sao.<br>Sau đó <b>sửa lại từng ô theo số của bạn</b> là ra lương của chính bạn.</div>
+      <div class="btnline">
+        <button type="button" onclick="vidu()">Điền lại ví dụ mẫu</button>
+        <button type="button" class="k" onclick="reset()">Xoá hết, tôi tự nhập</button>
+      </div>
+    </div>
+  </div>
 
   <div class="blk">
     <h2><i>1</i>Ngạch — theo vị trí công việc</h2>
@@ -166,11 +194,11 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
     <h2><i>4</i>Thưởng hiệu suất</h2>
     <p class="hint">Chia từ quỹ lương theo điểm công việc của từng người. <b>Đơn giá điểm công bố theo từng tháng</b> — nhập đúng con số của tháng này thì kết quả mới đúng.</p>
     <div class="row">
-      <div class="f"><label>Điểm của tôi trong tháng</label><input id="diem" type="number" inputmode="decimal" step="1" min="0" value="0"><span class="unit">điểm — không vượt ngày công × 8 giờ</span></div>
-      <div class="f"><label>Đơn giá một điểm</label><input id="donGia" type="number" inputmode="numeric" step="100" min="0" value="0"><span class="unit">đồng / điểm</span></div>
+      <div class="f"><label>Điểm của tôi trong tháng</label><input id="diem" type="number" inputmode="decimal" step="1" min="0" value="145"><span class="unit">điểm — số mẫu, sửa theo tháng của bạn (không vượt ngày công × 8 giờ)</span></div>
+      <div class="f"><label>Đơn giá một điểm</label><input id="donGia" type="number" inputmode="numeric" step="100" min="0" value="35900"><span class="unit">đồng / điểm — số mẫu, sửa theo đơn giá công bố của tháng</span></div>
     </div>
     <div class="row">
-      <div class="f"><label>Ngưỡng điểm của tôi</label><input id="nguong" type="number" inputmode="decimal" step="1" min="0" value="0"><span class="unit">để 0 nếu chưa biết</span></div>
+      <div class="f"><label>Ngưỡng điểm của tôi</label><input id="nguong" type="number" inputmode="decimal" step="1" min="0" value="145"><span class="unit">số mẫu — để 0 nếu chưa biết ngưỡng của mình</span></div>
       <div class="f"><label>Giờ đi làm thực tế</label><input id="gioThucTe" type="number" value="208" readonly style="background:#ececec"><span class="unit">tự tính = ngày công × 8</span></div>
     </div>
   </div>
@@ -196,7 +224,7 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
     <h2><i>7</i>Làm thêm giờ</h2>
     <p class="hint">150% ngày thường · 200% ngày nghỉ hằng tuần · 300% ngày lễ, Tết. <b>Trả tối đa 40 giờ một tháng</b>; giờ vượt không trả tiền làm thêm, kết quả làm được trong số giờ đó tính vào thưởng hiệu suất.</p>
     <div class="row">
-      <div class="f"><label>Ngày thường ×1,5</label><input id="ot1" type="number" inputmode="decimal" step="0.5" min="0" value="0"><span class="unit">giờ</span></div>
+      <div class="f"><label>Ngày thường ×1,5</label><input id="ot1" type="number" inputmode="decimal" step="0.5" min="0" value="10"><span class="unit">giờ</span></div>
       <div class="f"><label>Ngày nghỉ tuần ×2</label><input id="ot2" type="number" inputmode="decimal" step="0.5" min="0" value="0"><span class="unit">giờ</span></div>
     </div>
     <div class="row one">
@@ -207,10 +235,10 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
   <div class="blk">
     <h2><i>8</i>Cơm, chuyên cần, điện thoại</h2>
     <div class="row">
-      <div class="f"><label>Bữa không ăn tại chỗ</label><input id="buaCom" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 30.000 đ — ngày đi công trình không tính</span></div>
+      <div class="f"><label>Bữa không ăn tại chỗ</label><input id="buaCom" type="number" inputmode="numeric" step="1" min="0" value="4"><span class="unit">× 30.000 đ — ngày đi công trình không tính</span></div>
       <div class="f"><label>Hỗ trợ đi công trình</label><input id="congTrinh" type="number" inputmode="numeric" step="1000" min="0" value="0"><span class="unit">đồng — theo mốc khoảng cách</span></div>
     </div>
-    <label class="chk"><input type="checkbox" id="chuyenCan"><span class="t">Thưởng chuyên cần<s>Đi làm đủ số ngày làm việc của tháng</s></span><span class="v">200.000</span></label>
+    <label class="chk"><input type="checkbox" id="chuyenCan" checked><span class="t">Thưởng chuyên cần<s>Đi làm đủ số ngày làm việc của tháng</s></span><span class="v">200.000</span></label>
     <label class="chk"><input type="checkbox" id="dienThoai"><span class="t">Khoán điện thoại<s>Người được chỉ định</s></span><span class="v">200.000</span></label>
   </div>
 
@@ -400,7 +428,10 @@ var QL_MINBAC=[0,0,2,3,3,0];
 var DN=[["—",0],["Tham gia",150000],["Làm được",300000],["Làm chính",500000]];
 var TEAM=[["Không",0],["Đạt 2",150000],["Đạt 3",300000]];
 
-var S={ngach:0,bac:0,ql:0,team:0,dn:[{m:0,k:false},{m:0,k:false},{m:0,k:false}]};
+var MAU={ngach:1,bac:2,ql:0,team:0,dn:[{m:2,k:false},{m:0,k:false},{m:0,k:false}]};
+var MAUV={ngayCong:"26",ngayChuan:"26",diem:"145",donGia:"35900",nguong:"145",heSoXuong:"100",gioQL:"16",ot1:"10",ot2:"0",ot3:"0",buaCom:"4",congTrinh:"0",ctA:"0",ctB:"0",ctC:"0",loiNhe:"0",loiTB:"0",loiNang:"0"};
+var MAUC={chuyenCan:true,dienThoai:false,bh:true};
+var S=JSON.parse(JSON.stringify(MAU));
 function $(id){return document.getElementById(id)}
 function vnd(n){return Math.round(n||0).toLocaleString("vi-VN")}
 
@@ -571,17 +602,27 @@ function load(){
     CHK.forEach(function(i){if(d.c&&d.c[i]!=null)$(i).checked=d.c[i]});
   }catch(e){}
 }
+function vidu(){
+  S=JSON.parse(JSON.stringify(MAU));
+  IDS.forEach(function(i){$(i).value=MAUV[i]});
+  CHK.forEach(function(i){$(i).checked=MAUC[i]});
+  redraw();calc();save();
+  window.scrollTo(0,0);
+}
 function reset(){
   try{localStorage.removeItem("thutinhluong")}catch(e){}
   location.reload();
 }
 
-load();
+function redraw(){
 seg($("segNgach"),NGACH.map(function(x){return [x[0],0,x[2]]}),function(){return S.ngach},function(v){S.ngach=v});
 seg($("segBac"),BAC.map(function(x){return [x[0],0,x[2]]}),function(){return S.bac},function(v){S.bac=v});
 seg($("segQL"),QL.map(function(x){return [x[0],0,x[2]]}),function(){return S.ql},function(v){S.ql=v});
 seg($("segTeam"),TEAM.map(function(x){return [x[0],0,x[1]?vnd(x[1]):""]}),function(){return S.team},function(v){S.team=v});
 buildDN();
+}
+load();
+redraw();
 IDS.concat(CHK).forEach(function(i){
   $(i).addEventListener("input",function(){calc();save()});
   $(i).addEventListener("change",function(){calc();save()});
