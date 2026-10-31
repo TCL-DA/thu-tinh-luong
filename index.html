@@ -133,15 +133,181 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
 .btnline button{flex:1;font:inherit;font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:13px 8px;min-height:48px;background:#fff;color:#000;border:1px solid #000;cursor:pointer}
 .btnline button.k{background:var(--carbon);color:#fff;border-color:var(--carbon)}
 @media(min-width:620px){:root{--pad:30px} body{font-size:19px} .mark b{font-size:27px} .bar .m{font-size:32px} .line.tot .v{font-size:34px} .f input{font-size:22px}}
+
+/* ================= 50 HIEU UNG ================= */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}html{scroll-behavior:auto}}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:12px}
+
+/* 01 trang mo dan */
+body{animation:a_pg .45s ease both}
+@keyframes a_pg{from{opacity:0}to{opacity:1}}
+
+/* 02 ten trang troi len | 03 nhan goc phai | 04 dong gioi thieu */
+@keyframes a_up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.mark b{animation:a_up .5s cubic-bezier(.2,.8,.2,1) both}
+.mark span{animation:a_up .5s .07s cubic-bezier(.2,.8,.2,1) both}
+.lead{animation:a_up .5s .13s cubic-bezier(.2,.8,.2,1) both}
+
+/* 05 vach den duoi thanh tab quet ngang */
+nav{position:relative}
+nav::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:#000;transform:scaleX(0);transform-origin:left;animation:a_sweep .6s .18s cubic-bezier(.2,.8,.2,1) both}
+@keyframes a_sweep{to{transform:scaleX(1)}}
+
+/* 06 khoi den truot ngang giua 2 tab */
+#tabInd{position:absolute;top:0;bottom:2px;left:0;width:50%;background:var(--carbon);z-index:0;transform:translateX(0);transition:transform .34s cubic-bezier(.2,.8,.2,1)}
+nav button{position:relative;z-index:1;transition:color .28s ease,letter-spacing .28s ease}
+nav button[aria-selected="true"]{background:none;letter-spacing:.11em}
+
+/* 07 doi tab: noi dung troi len */
+section.on{animation:a_up .4s cubic-bezier(.2,.8,.2,1) both}
+
+/* 08 moi muc hien khi cuon toi | 09 so thu tu nay vao | 10 vach ngan quet ngang */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+h2 i{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.blk.act h2 i{transform:scale(1.14) rotate(-4deg)}
+.blk{position:relative}
+.blk::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:#000;transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.blk.act::after{transform:scaleX(1)}
+
+/* 11 the vi du troi vao | 12 nhan VI DU MAU gian ngang | 13 gach dau dong hien lan luot */
+.vd{position:relative;animation:a_vd .55s .1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes a_vd{from{opacity:0;transform:translateY(18px) scaleY(.96)}to{opacity:1;transform:none}}
+.vd .vh{transform-origin:left;animation:a_vh .45s .35s cubic-bezier(.2,.8,.2,1) both}
+@keyframes a_vh{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
+.vd li{animation:a_li .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes a_li{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.vd li:nth-child(1){animation-delay:.40s}
+.vd li:nth-child(2){animation-delay:.47s}
+.vd li:nth-child(3){animation-delay:.54s}
+.vd li:nth-child(4){animation-delay:.61s}
+.vd li:nth-child(5){animation-delay:.68s}
+.vd li:nth-child(6){animation-delay:.75s}
+
+/* 14 mui ten nhich qua lai */
+.arw{display:inline-block;animation:a_arw 1.8s ease-in-out infinite}
+@keyframes a_arw{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+
+/* 15 nut chon: nen den lan tu duoi len | 16 chu nhich theo | 17 nhan lun | 18 ro chuot */
+.seg button{position:relative;overflow:hidden;transition:background .2s ease,transform .12s ease;animation:a_sg .4s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes a_sg{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.seg button::before{content:"";position:absolute;inset:0;background:var(--carbon);transform:scaleY(0);transform-origin:bottom;transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:0}
+.seg button[aria-pressed="true"]{background:#fff}
+.seg button[aria-pressed="true"]::before{transform:scaleY(1)}
+.seg button em,.seg button small{position:relative;z-index:1;transition:color .25s ease,transform .25s cubic-bezier(.2,.8,.2,1)}
+.seg button[aria-pressed="true"] em{transform:translateY(-1px)}
+.seg button:hover{background:#efefef}
+.seg button:active{transform:scale(.95)}
+
+/* 19 cac nut chon hien lan luot (delay dat bang JS) | 20 ro chuot vuong */
+.rip{position:absolute;background:currentColor;opacity:.22;transform:scale(0);pointer-events:none;animation:a_rip .55s ease-out forwards;z-index:2}
+@keyframes a_rip{to{transform:scale(1);opacity:0}}
+
+/* 21 dong chu duoi hang nut doi muot */
+.segcap{transition:opacity .25s ease,transform .25s ease}
+.segcap.sw{opacity:0;transform:translateY(-5px)}
+
+/* 22 o nhap troi len khi go | 23 nhan lun khi bam | 24 nhan dam len | 25 dong don vi sang len */
+.f input{transition:transform .18s cubic-bezier(.2,.8,.2,1),border-color .2s ease,background .2s ease}
+.f input:focus{transform:translateY(-2px)}
+.f input:active{transform:scale(.995)}
+.f label{transition:color .22s ease,letter-spacing .22s ease}
+.f.fc label{color:#000;letter-spacing:.09em}
+.f .unit{transition:color .22s ease,opacity .22s ease;opacity:.85}
+.f.fc .unit{color:#000;opacity:1}
+
+/* 26 o tick vien dam dan | 27 nhan lun | 28 so tien nhich | 29 o vuong tick phong to */
+.chk{transition:border-color .22s ease,background .22s ease,transform .12s ease}
+.chk:active{transform:scale(.99)}
+.chk.ck{border-color:#000;background:#fafafa}
+.chk .v{display:inline-block;transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.chk.ck .v{transform:translateX(-3px)}
+.chk input{transition:transform .18s cubic-bezier(.2,.8,.2,1)}
+.chk input:checked{transform:scale(1.12)}
+
+/* 30 khoi nhom da nang hien dan | 31 vien ro khi di chuot | 32 so tien nhom nay khi doi */
+.grp{animation:a_up .45s cubic-bezier(.2,.8,.2,1) backwards;transition:border-color .25s ease}
+.grp:hover{border-color:#9a9a9a}
+.grp .gh span{display:inline-block}
+.grp .gh span.pp{animation:a_pop .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes a_pop{0%{transform:scale(.82)}60%{transform:scale(1.13)}100%{transform:scale(1)}}
+
+/* 33 bang ket qua: tung dong truot vao */
+.res .line{animation:a_ln .4s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes a_ln{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+
+/* 34 so tang troi len | 35 so giam troi xuong | 36 dong vua doi loe sang | 37 dong bang 0 mo dan */
+.line .v{display:inline-block}
+.line .v.vu{animation:a_vu .38s cubic-bezier(.2,.8,.2,1)}
+.line .v.vd{animation:a_vd2 .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes a_vu{from{transform:translateY(9px);opacity:.25}to{transform:none;opacity:1}}
+@keyframes a_vd2{from{transform:translateY(-9px);opacity:.25}to{transform:none;opacity:1}}
+.line.hit{animation:a_hit .7s ease}
+@keyframes a_hit{0%{background:rgba(255,255,255,.14)}100%{background:transparent}}
+.line{transition:opacity .35s ease}
+
+/* 38 dong TONG va THUC NHAN nay khi doi */
+.line.sub .v.pp,.line.tot .v.pp{animation:a_pop .45s cubic-bezier(.2,.8,.2,1)}
+
+/* 39 thanh ty le luong co dinh / thuong theo viec chay ngang */
+#mixL{font-size:12.5px;color:#9a9a9a;display:flex;justify-content:space-between;margin:14px 0 5px;font-weight:600}
+#mix{height:7px;background:#2a2a2f;display:flex;margin-bottom:2px}
+#mix i{display:block;height:100%;background:#fff;transition:width .55s cubic-bezier(.2,.8,.2,1)}
+#mix i+i{background:#8f8f93}
+
+/* 40 canh bao vang truot xuong */
+.flag{animation:a_fl .4s cubic-bezier(.2,.8,.2,1) both;transform-origin:top}
+@keyframes a_fl{from{opacity:0;transform:translateY(-8px) scaleY(.85)}to{opacity:1;transform:none}}
+
+/* 41 thanh day an khi cuon xuong, hien khi cuon len | 42 so o thanh day nay khi doi */
+.bar{transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+.bar.hid{transform:translateY(115%)}
+.bar .m{display:inline-block}
+.bar .m.pp{animation:a_pop .45s cubic-bezier(.2,.8,.2,1)}
+
+/* 43 nut Chi tiet dao mau | 44 vung ket qua loe vien khi nhay toi */
+.bar a{transition:background .22s ease,color .22s ease,transform .12s ease}
+.bar a:hover{background:#fff;color:var(--carbon)}
+.bar a:active{transform:scale(.94)}
+#res.ping{animation:a_ping .9s ease}
+@keyframes a_ping{0%{outline:3px solid #fff;outline-offset:-3px}100%{outline:0 solid transparent;outline-offset:0}}
+
+/* 45 thanh tien do doc trang chay tren dinh */
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:#000;z-index:60;transition:width .12s linear}
+
+/* 46 hang bang sang khi di chuot | 47 o dang chon trong ma tran sang dan | 48 hang ngach doi nen muot */
+.tb tr td{transition:background .25s ease,color .25s ease}
+.tb tr:hover td{background:#f4f4f4}
+.tb tr.me:hover td{background:#ffe09a}
+#mx td.sel{animation:a_cell .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes a_cell{0%{background:#8a8a8a}100%{background:#0f0e12}}
+
+/* 49 nut duoi cung: nen dao tu trai sang */
+.btnline button{position:relative;overflow:hidden;transition:color .25s ease,transform .12s ease}
+.btnline button::before{content:"";position:absolute;inset:0;background:#000;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:0}
+.btnline button:hover::before{transform:scaleX(1)}
+.btnline button:hover{color:#fff}
+.btnline button.k::before{background:#fff}
+.btnline button.k:hover{color:#000}
+.btnline button:active{transform:scale(.97)}
+.btnline button>span{position:relative;z-index:1}
+
+/* 50 bam "Dien lai vi du mau": ca the loe len mot nhip */
+.vd.flash{animation:a_flash .85s ease}
+@keyframes a_flash{0%{background:#ffe9b0}100%{background:#fff}}
+
+@media print{#prog,#tabInd{display:none}.rv{opacity:1!important;transform:none!important}}
 @media print{.bar,nav,.btnline{display:none} body{padding-bottom:0} section{display:block!important}}
 </style>
 </head>
 <body>
+<div id="prog"></div>
 <div class="wrap">
 <header>
   <div class="mark"><b>thử tính lương</b><span>bản thử<br>số tham khảo</span></div>
   <p class="lead"><b>Các ô đã điền sẵn số mẫu</b> — bạn chỉ cần chọn đúng ngạch, bậc rồi sửa lại các số cho đúng tháng của mình. Trang tự cộng ra lương tạm tính; số bạn nhập chỉ nằm trong máy bạn.</p>
-  <nav role="tablist">
+  <nav role="tablist"><span id="tabInd"></span>
     <button role="tab" id="t1" aria-selected="true" onclick="tab(1)">Thử tính</button>
     <button role="tab" id="t2" aria-selected="false" onclick="tab(2)">Bảng &amp; cách tính</button>
   </nav>
@@ -161,10 +327,10 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
         <li>Làm thêm <b>10 giờ ngày thường</b></li>
         <li><b>4 bữa</b> không ăn tại chỗ, đi đủ công nên có <b>thưởng chuyên cần</b></li>
       </ul>
-      <div class="ar">→ Kéo xuống cuối trang, bảng đen cho thấy từng khoản cộng ra sao.<br>Sau đó <b>sửa lại từng ô theo số của bạn</b> là ra lương của chính bạn.</div>
+      <div class="ar"><span class="arw">→</span> Kéo xuống cuối trang, bảng đen cho thấy từng khoản cộng ra sao.<br>Sau đó <b>sửa lại từng ô theo số của bạn</b> là ra lương của chính bạn.</div>
       <div class="btnline">
-        <button type="button" onclick="vidu()">Điền lại ví dụ mẫu</button>
-        <button type="button" class="k" onclick="reset()">Xoá hết, tôi tự nhập</button>
+        <button type="button" onclick="vidu()"><span>Điền lại ví dụ mẫu</span></button>
+        <button type="button" class="k" onclick="reset()"><span>Xoá hết, tôi tự nhập</span></button>
       </div>
     </div>
   </div>
@@ -274,6 +440,8 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
     <div class="px">
       <h3>Kết quả thử tính</h3>
       <div id="lines"></div>
+      <div id="mixL"><span>Lương cố định</span><span>Thưởng theo việc</span></div>
+      <div id="mix"><i></i><i></i></div>
       <div id="flags"></div>
       <p class="note">Trang thử tính để tham khảo. Số chính thức là bảng lương được phát. Mỗi người được xem điểm, thưởng của mình và công thức tính, có quyền ghi ý kiến trong 5 ngày kể từ ngày nhận lương.</p>
     </div>
@@ -281,8 +449,8 @@ footer{padding:22px var(--pad) 30px;font-size:13.5px;color:var(--muted);line-hei
 
   <div class="blk">
     <div class="btnline">
-      <button type="button" onclick="window.print()">In / lưu PDF</button>
-      <button type="button" class="k" onclick="reset()">Xoá, nhập lại</button>
+      <button type="button" onclick="window.print()"><span>In / lưu PDF</span></button>
+      <button type="button" class="k" onclick="reset()"><span>Xoá, nhập lại</span></button>
     </div>
   </div>
 </section>
@@ -441,10 +609,32 @@ function seg(box,items,get,set){
     var b=document.createElement("button");
     b.type="button";
     b.innerHTML="<em>"+it[0]+"</em>"+(it[2]?"<small>"+it[2]+"</small>":"");
-    b.setAttribute("aria-pressed",get()===i?"true":"false");
-    b.onclick=function(){set(i);seg(box,items,get,set);calc();save()};
+    b.setAttribute("aria-pressed","false");
+    b.style.animationDelay=(i*0.045)+"s";
+    if(get()===i)requestAnimationFrame(function(){b.setAttribute("aria-pressed","true")});
+    b.onclick=function(ev){
+      ripple(b,ev);
+      var cap=box.nextElementSibling;
+      if(cap&&cap.className.indexOf("segcap")>=0){cap.classList.add("sw");setTimeout(function(){cap.classList.remove("sw")},170)}
+      set(i);
+      var kids=box.children;
+      for(var j=0;j<kids.length;j++)if(kids[j].tagName==="BUTTON")kids[j].setAttribute("aria-pressed",kids[j]===b?"true":"false");
+      calc();save();
+    };
     box.appendChild(b);
   });
+}
+function ripple(el,ev){
+  try{
+    var r=el.getBoundingClientRect(),d=Math.max(r.width,r.height)*2;
+    var x=(ev&&ev.clientX?ev.clientX:r.left+r.width/2)-r.left;
+    var y=(ev&&ev.clientY?ev.clientY:r.top+r.height/2)-r.top;
+    var sp=document.createElement("span");
+    sp.className="rip";
+    sp.style.left=(x-d/2)+"px";sp.style.top=(y-d/2)+"px";sp.style.width=d+"px";sp.style.height=d+"px";
+    el.appendChild(sp);
+    setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},560);
+  }catch(e){}
 }
 function buildDN(){
   var w=$("dnWrap");w.innerHTML="";
@@ -482,7 +672,11 @@ function calc(){
     var t=DN[S.dn[i].m][1]+(S.dn[i].m>0&&S.dn[i].k?300000:0);
     if(S.dn[i].m>0)dnSo++;
     daNang+=t;
-    var el=$("dnv"+i); if(el)el.textContent=vnd(t);
+    var el=$("dnv"+i);
+    if(el){
+      if(el.textContent!==vnd(t)&&el.textContent!==""){el.classList.remove("pp");void el.offsetWidth;el.classList.add("pp")}
+      el.textContent=vnd(t);
+    }
   }
 
   var qlIdx=S.ql, qlHa=false;
@@ -530,13 +724,15 @@ function calc(){
     ["Thưởng phát hiện lỗi","",phatLoi,false]
   ];
   var html="";
-  L.forEach(function(r){
-    html+='<div class="line'+(r[2]<=0&&!r[3]?" zero":"")+'"><span class="n">'+r[0]+(r[1]?"<s>"+r[1]+"</s>":"")+'</span><span class="v">'+vnd(r[2])+"</span></div>";
+  L.forEach(function(r,i){
+    html+='<div class="line'+(r[2]<=0&&!r[3]?" zero":"")+'" data-k="r'+i+'" style="animation-delay:'+(i*0.028)+'s"><span class="n">'+r[0]+(r[1]?"<s>"+r[1]+"</s>":"")+'</span><span class="v" data-v="'+Math.round(r[2])+'">'+vnd(r[2])+"</span></div>";
   });
-  html+='<div class="line sub"><span class="n">TỔNG THU NHẬP</span><span class="v">'+vnd(tong)+"</span></div>";
-  if(bh>0)html+='<div class="line"><span class="n">Trừ bảo hiểm 10,5%<s>trên lương cấp bậc đủ tháng</s></span><span class="v">− '+vnd(bh)+"</span></div>";
-  html+='<div class="line tot"><span class="n">TẠM TÍNH<br>THỰC NHẬN</span><span class="v">'+vnd(thucNhan)+"</span></div>";
+  html+='<div class="line sub" data-k="sub"><span class="n">TỔNG THU NHẬP</span><span class="v" data-v="'+Math.round(tong)+'">'+vnd(tong)+"</span></div>";
+  if(bh>0)html+='<div class="line" data-k="bh"><span class="n">Trừ bảo hiểm 10,5%<s>trên lương cấp bậc đủ tháng</s></span><span class="v" data-pre="− " data-v="'+Math.round(bh)+'">− '+vnd(bh)+"</span></div>";
+  html+='<div class="line tot" data-k="tot"><span class="n">TẠM TÍNH<br>THỰC NHẬN</span><span class="v" data-v="'+Math.round(thucNhan)+'">'+vnd(thucNhan)+"</span></div>";
   $("lines").innerHTML=html;
+  animNums();
+  mixBar(luongNgayCong,tong);
 
   var f="";
   if(donGia<=0&&diem>0)f+='<div class="flag">Chưa nhập đơn giá điểm của tháng này nên thưởng hiệu suất đang bằng 0.</div>';
@@ -554,7 +750,7 @@ function calc(){
   }
   $("flags").innerHTML=f;
 
-  $("barTot").textContent=vnd(thucNhan);
+  setNum($("barTot"),thucNhan,"");
   $("barSub").textContent="tạm tính · "+NGACH[S.ngach][0]+" · "+BAC[S.bac][0]+(qlIdx?" · "+QL[qlIdx][0]:"");
   $("capNgach").textContent="Ngạch "+NGACH[S.ngach][0]+" — "+NGACH_FULL[S.ngach]+" · cộng "+vnd(NGACH[S.ngach][1])+" đ";
   $("capBac").textContent="Bậc "+BAC[S.bac][0]+" — "+BAC_FULL[S.bac]+" · cộng "+vnd(BAC[S.bac][1])+" đ";
@@ -571,7 +767,7 @@ function paintMatrix(){
     BAC.forEach(function(b,j){
       var v=BASE+n[1]+b[1];
       var me=(i===S.ngach&&j===S.bac);
-      h+='<td class="n"'+(me?' style="background:#0f0e12;color:#fff"':"")+">"+vnd(v)+"</td>";
+      h+='<td class="n'+(me?" sel":"")+'"'+(me?' style="background:#0f0e12;color:#fff"':"")+">"+vnd(v)+"</td>";
     });
     h+="</tr>";
   });
@@ -579,11 +775,13 @@ function paintMatrix(){
 }
 
 function tab(n){
+  var ind=$("tabInd"); if(ind)ind.style.transform="translateX("+(n===1?0:100)+"%)";
   $("s1").className=n===1?"on":"";
   $("s2").className=n===2?"on":"";
   $("t1").setAttribute("aria-selected",n===1);
   $("t2").setAttribute("aria-selected",n===2);
   window.scrollTo(0,0);
+  if(REVEAL){REVEAL();setTimeout(REVEAL,60);setTimeout(REVEAL,320)}
 }
 var IDS=["ngayCong","ngayChuan","diem","donGia","nguong","heSoXuong","gioQL","ot1","ot2","ot3","buaCom","congTrinh","ctA","ctB","ctC","loiNhe","loiTB","loiNang"];
 var CHK=["chuyenCan","dienThoai","bh"];
@@ -607,11 +805,137 @@ function vidu(){
   IDS.forEach(function(i){$(i).value=MAUV[i]});
   CHK.forEach(function(i){$(i).checked=MAUC[i]});
   redraw();calc();save();
-  window.scrollTo(0,0);
+  var vd=document.querySelector(".vd");
+  if(vd){vd.classList.remove("flash");void vd.offsetWidth;vd.classList.add("flash")}
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function reset(){
   try{localStorage.removeItem("thutinhluong")}catch(e){}
   location.reload();
+}
+
+
+/* ============ BO MAY HIEU UNG ============ */
+var RM=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+var PREV={},FIRST=true,REVEAL=null;
+
+function setNum(el,to,pre){
+  if(!el)return;
+  var from=parseFloat(el.getAttribute("data-v"));
+  if(isNaN(from))from=to;
+  el.setAttribute("data-v",Math.round(to));
+  if(RM||from===to){el.textContent=pre+vnd(to);return;}
+  if(el.className.indexOf("pp")<0){el.classList.remove("pp");void el.offsetWidth;el.classList.add("pp")}
+  countTo(el,from,to,pre);
+}
+function countTo(el,from,to,pre){
+  var t0=null,dur=380;
+  function step(ts){
+    if(t0===null)t0=ts;
+    var k=Math.min(1,(ts-t0)/dur);
+    k=1-Math.pow(1-k,3);
+    el.textContent=pre+vnd(from+(to-from)*k);
+    if(k<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function animNums(){
+  var ls=document.querySelectorAll("#lines .line");
+  for(var i=0;i<ls.length;i++){
+    var el=ls[i],k=el.getAttribute("data-k"),v=el.querySelector(".v");
+    if(!v)continue;
+    var nv=parseFloat(v.getAttribute("data-v"))||0, ov=PREV[k], pre=v.getAttribute("data-pre")||"";
+    if(!FIRST&&ov!=null&&ov!==nv&&!RM){
+      v.classList.add(nv>ov?"vu":"vd");
+      el.classList.add("hit");
+      if(el.className.indexOf("sub")>=0||el.className.indexOf("tot")>=0)v.classList.add("pp");
+      countTo(v,ov,nv,pre);
+    }
+    if(FIRST)el.style.animationDelay=(i*0.028)+"s";
+    PREV[k]=nv;
+  }
+  FIRST=false;
+}
+function mixBar(codinh,tong){
+  var m=$("mix"),l=$("mixL");
+  if(!m||!l)return;
+  var a=tong>0?Math.max(0,Math.min(100,codinh/tong*100)):100;
+  m.children[0].style.width=a+"%";
+  m.children[1].style.width=(100-a)+"%";
+  l.children[0].textContent="Lương cố định "+Math.round(a)+"%";
+  l.children[1].textContent=Math.round(100-a)+"% thưởng theo việc";
+}
+function initAnim(){
+  /* hien dan khi cuon toi + muc dang xem */
+  var blks=document.querySelectorAll(".blk"),i;
+  for(i=0;i<blks.length;i++)blks[i].classList.add("rv");
+  var rows=document.querySelectorAll(".tb tr, .rules li, #s2 p.tx");
+  for(i=0;i<rows.length;i++){
+    rows[i].classList.add("rv");
+    rows[i].style.transitionDelay=((i%8)*0.04)+"s";
+  }
+  /* mo ra moi thu da di qua hoac dang trong tam nhin — chay theo cuon, khong bo sot khi nhay trang */
+  var tick=false;
+  function reveal(){
+    tick=false;
+    var H=window.innerHeight,all=document.querySelectorAll(".rv:not(.in)");
+    for(var j=0;j<all.length;j++){
+      var e=all[j],r=e.getBoundingClientRect();
+      if(r.height===0&&r.top===0)continue;
+      if(r.top<H*1.05)e.classList.add("in");
+    }
+    for(var k=0;k<blks.length;k++){
+      var rb=blks[k].getBoundingClientRect();
+      blks[k].classList.toggle("act",rb.top<H*0.9&&rb.bottom>H*0.06);
+    }
+  }
+  function onScroll(){if(!tick){tick=true;requestAnimationFrame(reveal)}}
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",onScroll,{passive:true});
+  reveal();
+  setTimeout(reveal,120);
+  REVEAL=reveal;
+  /* o tick */
+  var cks=document.querySelectorAll(".chk");
+  for(i=0;i<cks.length;i++)(function(l){
+    var ip=l.querySelector("input");
+    function up(){l.classList.toggle("ck",ip.checked)}
+    ip.addEventListener("change",up); up();
+  })(cks[i]);
+  /* o nhap: nhan sang len khi go */
+  var fs=document.querySelectorAll(".f input");
+  for(i=0;i<fs.length;i++)(function(ip){
+    var box=ip.parentNode;
+    ip.addEventListener("focus",function(){box.classList.add("fc")});
+    ip.addEventListener("blur",function(){box.classList.remove("fc")});
+  })(fs[i]);
+  /* ro chuot cho nut thuong */
+  var bs=document.querySelectorAll(".btnline button, nav button");
+  for(i=0;i<bs.length;i++)(function(b){
+    b.style.position="relative";b.style.overflow="hidden";
+    b.addEventListener("click",function(ev){ripple(b,ev)});
+  })(bs[i]);
+  /* thanh tien do + thanh day an hien */
+  var lastY=window.scrollY||0,bar=document.querySelector(".bar"),pg=$("prog");
+  window.addEventListener("scroll",function(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    var y=window.scrollY||document.documentElement.scrollTop||0;
+    if(pg)pg.style.width=(h>0?Math.min(100,y/h*100):0)+"%";
+    if(bar){
+      if(y>lastY+10&&y>280)bar.classList.add("hid");
+      else if(y<lastY-10)bar.classList.remove("hid");
+    }
+    lastY=y;
+  },{passive:true});
+  /* bam Chi tiet: vung ket qua loe vien */
+  var link=document.querySelector('.bar a[href="#res"]');
+  if(link)link.addEventListener("click",function(){
+    var r=$("res");
+    setTimeout(function(){r.classList.remove("ping");void r.offsetWidth;r.classList.add("ping");if(REVEAL)REVEAL()},420);
+    if(REVEAL){setTimeout(REVEAL,60);setTimeout(REVEAL,700);setTimeout(REVEAL,1100)}
+  });
+  /* con truot tab dung cho lan dau */
+  var ind=$("tabInd"); if(ind)ind.style.transform="translateX(0%)";
 }
 
 function redraw(){
@@ -628,6 +952,7 @@ IDS.concat(CHK).forEach(function(i){
   $(i).addEventListener("change",function(){calc();save()});
 });
 calc();
+initAnim();
 </script>
 </body>
 </html>
