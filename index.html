@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f0e12">
+<title>Thử tính lương</title>
+<meta name="description" content="Trang thử tính lương tháng theo ngạch × bậc, thưởng hiệu suất, đa năng, quản lý. Số tham khảo.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --canvas:#f6f8f7; --ink:#000; --carbon:#0f0e12; --rule:#d8d8d8; --rule2:#000;
+  --muted:#6e6e6e; --warn:#f0a800; --pad:16px;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--canvas); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.45; padding-bottom:120px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:720px;margin:0 auto}
+.px{padding-left:var(--pad);padding-right:var(--pad)}
+
+header{border-bottom:1px solid var(--rule2);background:var(--canvas)}
+.mark{padding:14px var(--pad) 12px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.mark b{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.mark span{font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:right}
+.lead{padding:0 var(--pad) 14px;font-size:13.5px;line-height:1.45;color:var(--muted)}
+nav{display:flex;border-top:1px solid var(--rule)}
+nav button{
+  flex:1;background:none;border:0;border-right:1px solid var(--rule);
+  font:inherit;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:14px 6px;color:var(--muted);cursor:pointer;min-height:48px
+}
+nav button:last-child{border-right:0}
+nav button[aria-selected="true"]{background:var(--carbon);color:#fff}
+
+section{display:none}
+section.on{display:block}
+.blk{border-bottom:1px solid var(--rule);padding:18px var(--pad) 20px}
+.blk:last-child{border-bottom:0}
+h2{
+  font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:4px;display:flex;align-items:center;gap:8px;line-height:1.3
+}
+h2 i{font-style:normal;font-size:11px;font-weight:700;background:var(--carbon);color:#fff;
+  width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.hint{font-size:13.5px;color:var(--muted);margin-bottom:14px;line-height:1.45}
+.hint b{color:var(--ink);font-weight:700}
+label.lb{display:block;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+
+.seg{display:grid;border:1px solid var(--rule2);margin-bottom:16px}
+.seg.c6{grid-template-columns:repeat(6,1fr)}
+.seg.c5{grid-template-columns:repeat(5,1fr)}
+.seg.c4{grid-template-columns:repeat(4,1fr)}
+.seg.c3{grid-template-columns:repeat(3,1fr)}
+.seg button{
+  background:#fff;border:0;border-right:1px solid var(--rule);font:inherit;
+  padding:10px 2px;cursor:pointer;min-height:54px;color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.15
+}
+.seg button:last-child{border-right:0}
+.seg button em{font-style:normal;font-size:17px;font-weight:700}
+.seg button small{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.01em}
+.seg button[aria-pressed="true"]{background:var(--carbon);color:#fff}
+.seg button[aria-pressed="true"] small{color:#bdbdbd}
+.segcap{font-size:13.5px;font-weight:600;margin:-10px 0 16px;min-height:19px;line-height:1.35}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;align-items:end}
+.row.one{grid-template-columns:1fr}
+.f label{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;line-height:1.3}
+.f input{
+  width:100%;border:1px solid var(--rule2);background:#fff;border-radius:0;
+  font:inherit;font-size:18px;font-weight:700;padding:11px 10px;min-height:48px;
+  font-variant-numeric:tabular-nums;color:var(--ink)
+}
+.f input:focus{outline:3px solid var(--carbon);outline-offset:-1px}
+.f .unit{font-size:11.5px;font-weight:600;color:var(--muted);margin-top:4px;display:block;line-height:1.3}
+
+.chk{display:flex;align-items:center;gap:12px;border:1px solid var(--rule);background:#fff;padding:11px 12px;margin-bottom:8px;min-height:52px;cursor:pointer}
+.chk input{width:22px;height:22px;flex:none;accent-color:#000}
+.chk .t{font-size:15px;font-weight:600;line-height:1.25}
+.chk .t s{display:block;text-decoration:none;font-size:12px;font-weight:500;color:var(--muted)}
+.chk .v{margin-left:auto;font-size:15px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.grp{border:1px solid var(--rule);background:#fff;padding:12px;margin-bottom:10px}
+.grp .gh{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between}
+.grp .gh span{font-variant-numeric:tabular-nums}
+
+.res{background:var(--carbon);color:#fff}
+.res .px{padding-top:18px;padding-bottom:20px}
+.res h3{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#b2b2b2;margin-bottom:12px}
+.line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #2a2a2f;font-size:15px}
+.line .n{font-weight:500;color:#e6e6e6}
+.line .n s{display:block;text-decoration:none;font-size:11.5px;color:#9a9a9a;font-weight:500;line-height:1.3}
+.line .v{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.line.zero{opacity:.35}
+.line.tot{border-bottom:0;border-top:2px solid #fff;margin-top:6px;padding-top:14px}
+.line.tot .n{font-weight:700;color:#fff;font-size:15px;align-self:center}
+.line.tot .v{font-size:27px;letter-spacing:-.02em}
+.line.sub .v{font-size:19px}
+.note{font-size:12px;color:#9a9a9a;margin-top:12px;line-height:1.5}
+.flag{background:var(--warn);color:#000;font-size:13.5px;font-weight:600;padding:10px 12px;margin-top:10px;line-height:1.4}
+
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--carbon);color:#fff;border-top:2px solid #fff;z-index:30}
+.bar .in{max-width:720px;margin:0 auto;padding:10px var(--pad) calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:10px}
+.bar .k{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#b2b2b2}
+.bar .k s{display:block;text-decoration:none;font-size:10px;color:#7d7d7d;letter-spacing:.03em}
+.bar .m{font-size:25px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin-left:auto}
+.bar a{color:#fff;text-decoration:none;border:1px solid #fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 10px;min-height:42px;display:flex;align-items:center;flex:none}
+
+.tb{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0 4px;background:#fff}
+.tb th,.tb td{border:1px solid var(--rule);padding:8px 7px;text-align:left;vertical-align:top;line-height:1.35}
+.tb th{background:var(--carbon);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.tb td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.tb tr.me td{background:#ffe9b0}
+.tb .rh{font-weight:700;background:#f0f0f0}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 calc(-1 * var(--pad));padding:0 var(--pad)}
+.rules li{margin:0 0 9px 19px;font-size:14.5px;line-height:1.5}
+.rules li b{font-weight:700}
+p.tx{font-size:14.5px;line-height:1.55;margin-bottom:10px}
+footer{padding:22px var(--pad) 30px;font-size:12px;color:var(--muted);line-height:1.55;border-top:1px solid var(--rule2)}
+.btnline{display:flex;gap:10px}
+.btnline button{flex:1;font:inherit;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:13px 8px;min-height:48px;background:#fff;color:#000;border:1px solid #000;cursor:pointer}
+.btnline button.k{background:var(--carbon);color:#fff;border-color:var(--carbon)}
+@media(min-width:620px){:root{--pad:28px} body{font-size:17px} .mark b{font-size:25px} .bar .m{font-size:30px}}
+@media print{.bar,nav,.btnline{display:none} body{padding-bottom:0} section{display:block!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="mark"><b>thử tính lương</b><span>bản thử<br>số tham khảo</span></div>
+  <p class="lead">Chọn ngạch, bậc và nhập số của tháng — trang tự cộng ra lương tạm tính. Số bạn nhập chỉ nằm trong máy bạn.</p>
+  <nav role="tablist">
+    <button role="tab" id="t1" aria-selected="true" onclick="tab(1)">Thử tính</button>
+    <button role="tab" id="t2" aria-selected="false" onclick="tab(2)">Bảng &amp; cách tính</button>
+  </nav>
+</header>
+
+<section id="s1" class="on">
+
+  <div class="blk">
+    <h2><i>1</i>Ngạch — theo vị trí công việc</h2>
+    <p class="hint">Bấm chọn một ô.</p>
+    <div class="seg c5" id="segNgach"></div>
+    <div class="segcap" id="capNgach"></div>
+
+    <h2><i>2</i>Bậc — theo kết quả chấm năng lực</h2>
+    <p class="hint">Hai trục độc lập: <b>ngạch do vị trí, bậc do năng lực</b>.</p>
+    <div class="seg c5" id="segBac"></div>
+    <div class="segcap" id="capBac"></div>
+  </div>
+
+  <div class="blk">
+    <h2><i>3</i>Ngày công</h2>
+    <p class="hint">Lương cấp bậc trả theo ngày công: <b>lương cấp bậc × ngày công được trả ÷ số ngày làm việc của tháng</b>.</p>
+    <div class="row">
+      <div class="f"><label>Ngày công được trả</label><input id="ngayCong" type="number" inputmode="decimal" step="0.5" min="0" value="26"><span class="unit">ngày</span></div>
+      <div class="f"><label>Ngày làm việc của tháng</label><input id="ngayChuan" type="number" inputmode="decimal" step="0.5" min="1" value="26"><span class="unit">ngày</span></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <h2><i>4</i>Thưởng hiệu suất</h2>
+    <p class="hint">Chia từ quỹ lương theo điểm công việc của từng người. <b>Đơn giá điểm công bố theo từng tháng</b> — nhập đúng con số của tháng này thì kết quả mới đúng.</p>
+    <div class="row">
+      <div class="f"><label>Điểm của tôi trong tháng</label><input id="diem" type="number" inputmode="decimal" step="1" min="0" value="0"><span class="unit">điểm — không vượt ngày công × 8 giờ</span></div>
+      <div class="f"><label>Đơn giá một điểm</label><input id="donGia" type="number" inputmode="numeric" step="100" min="0" value="0"><span class="unit">đồng / điểm</span></div>
+    </div>
+    <div class="row">
+      <div class="f"><label>Ngưỡng điểm của tôi</label><input id="nguong" type="number" inputmode="decimal" step="1" min="0" value="0"><span class="unit">để 0 nếu chưa biết</span></div>
+      <div class="f"><label>Giờ đi làm thực tế</label><input id="gioThucTe" type="number" value="208" readonly style="background:#ececec"><span class="unit">tự tính = ngày công × 8</span></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <h2><i>5</i>Thưởng đa năng</h2>
+    <p class="hint">Mỗi nhóm công đoạn <b>ngoài chuyên môn chính</b>, tính theo số giờ định mức làm được trên thẻ công việc. <b>Tối đa 3 nhóm một tháng.</b> Không có thẻ thì không tính.</p>
+    <div id="dnWrap"></div>
+  </div>
+
+  <div class="blk">
+    <h2><i>6</i>Thưởng quản lý</h2>
+    <p class="hint">Theo <b>vai trò và kết quả chung</b>, không theo số người quản. Nhận = mức chuẩn × hệ số kết quả chung (trần 120%) × tỷ lệ ngày công.</p>
+    <div class="seg c6" id="segQL"></div>
+    <div class="segcap" id="capQL"></div>
+    <div class="row">
+      <div class="f"><label>Kết quả chung tháng này</label><input id="heSoXuong" type="number" inputmode="decimal" step="1" min="0" max="120" value="100"><span class="unit">% — tổng điểm thợ ÷ tổng ngưỡng, trần 120%</span></div>
+      <div class="f"><label>Giờ quản lý có chứng cứ</label><input id="gioQL" type="number" inputmode="decimal" step="1" min="0" value="16"><span class="unit">từ 16 giờ hưởng đủ, dưới thì theo tỷ lệ</span></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <h2><i>7</i>Làm thêm giờ</h2>
+    <p class="hint">150% ngày thường · 200% ngày nghỉ hằng tuần · 300% ngày lễ, Tết. <b>Trả tối đa 40 giờ một tháng</b>; giờ vượt không trả tiền làm thêm, kết quả làm được trong số giờ đó tính vào thưởng hiệu suất.</p>
+    <div class="row">
+      <div class="f"><label>Ngày thường ×1,5</label><input id="ot1" type="number" inputmode="decimal" step="0.5" min="0" value="0"><span class="unit">giờ</span></div>
+      <div class="f"><label>Ngày nghỉ tuần ×2</label><input id="ot2" type="number" inputmode="decimal" step="0.5" min="0" value="0"><span class="unit">giờ</span></div>
+    </div>
+    <div class="row one">
+      <div class="f"><label>Ngày lễ, Tết ×3</label><input id="ot3" type="number" inputmode="decimal" step="0.5" min="0" value="0"><span class="unit">giờ</span></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <h2><i>8</i>Cơm, chuyên cần, điện thoại</h2>
+    <div class="row">
+      <div class="f"><label>Bữa không ăn tại chỗ</label><input id="buaCom" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 30.000 đ — ngày đi công trình không tính</span></div>
+      <div class="f"><label>Hỗ trợ đi công trình</label><input id="congTrinh" type="number" inputmode="numeric" step="1000" min="0" value="0"><span class="unit">đồng — theo mốc khoảng cách</span></div>
+    </div>
+    <label class="chk"><input type="checkbox" id="chuyenCan"><span class="t">Thưởng chuyên cần<s>Đi làm đủ số ngày làm việc của tháng</s></span><span class="v">200.000</span></label>
+    <label class="chk"><input type="checkbox" id="dienThoai"><span class="t">Khoán điện thoại<s>Người được chỉ định</s></span><span class="v">200.000</span></label>
+  </div>
+
+  <div class="blk">
+    <h2><i>9</i>Cải tiến, đội nhóm, phát hiện lỗi</h2>
+    <p class="hint">Cải tiến được duyệt thì thưởng ngay trong kỳ lương tháng đó. Nhiều người cùng làm một cải tiến thì chia đều.</p>
+    <div class="row">
+      <div class="f"><label>Cải tiến mức A</label><input id="ctA" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 1.000.000 đ — cải tiến lớn</span></div>
+      <div class="f"><label>Cải tiến mức B</label><input id="ctB" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 300.000 đ — chặn lỗi lặp lại</span></div>
+    </div>
+    <div class="row one">
+      <div class="f"><label>Cải tiến mức C</label><input id="ctC" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 100.000 đ — góp ý nhỏ được áp dụng</span></div>
+    </div>
+    <label class="lb">Thưởng đội nhóm của tổ</label>
+    <div class="seg c3" id="segTeam"></div>
+    <label class="lb">Phát hiện lỗi của khâu trước — số phiếu</label>
+    <div class="row">
+      <div class="f"><label>Lỗi nhẹ</label><input id="loiNhe" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 20.000 đ</span></div>
+      <div class="f"><label>Lỗi thường</label><input id="loiTB" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 50.000 đ</span></div>
+    </div>
+    <div class="row one">
+      <div class="f"><label>Lỗi nặng</label><input id="loiNang" type="number" inputmode="numeric" step="1" min="0" value="0"><span class="unit">× 200.000 đ — tối đa 300.000 đ một máy</span></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <h2><i>10</i>Trừ bảo hiểm</h2>
+    <label class="chk"><input type="checkbox" id="bh" checked><span class="t">Trừ BHXH + BHYT + BHTN 10,5%<s>Tính trên lương cấp bậc đủ tháng, cố định hằng tháng</s></span><span class="v" id="bhV">0</span></label>
+    <p class="hint" style="margin:8px 0 0">Chưa tính thuế thu nhập cá nhân và giảm trừ gia cảnh — số “thực nhận” dưới đây là <b>tạm tính</b>.</p>
+  </div>
+
+  <div class="res" id="res">
+    <div class="px">
+      <h3>Kết quả thử tính</h3>
+      <div id="lines"></div>
+      <div id="flags"></div>
+      <p class="note">Trang thử tính để tham khảo. Số chính thức là bảng lương được phát. Mỗi người được xem điểm, thưởng của mình và công thức tính, có quyền ghi ý kiến trong 5 ngày kể từ ngày nhận lương.</p>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="btnline">
+      <button type="button" onclick="window.print()">In / lưu PDF</button>
+      <button type="button" class="k" onclick="reset()">Xoá, nhập lại</button>
+    </div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="blk">
+    <h2>Lương tháng gồm những gì</h2>
+    <p class="tx"><b>LƯƠNG THÁNG = LƯƠNG CẤP BẬC + THƯỞNG HIỆU SUẤT</b>, cộng các khoản khác: làm thêm giờ, cơm, chuyên cần, khoán điện thoại, hỗ trợ đi công trình, thưởng đa năng, thưởng quản lý, thưởng cải tiến, thưởng đội nhóm, thưởng cuối năm.</p>
+    <p class="tx"><b>Lương cấp bậc = 6.000.000 + cộng theo ngạch + cộng theo bậc.</b> Phần đa năng và phần quản lý không nằm trong lương cấp bậc, trả hằng tháng theo kết quả.</p>
+  </div>
+
+  <div class="blk">
+    <h2>Bảng lương nghề: ngạch × bậc</h2>
+    <p class="hint">Chưa gồm phụ cấp, đồng/tháng. Ô đen là ô đang chọn ở tab thử tính.</p>
+    <div class="scroll"><table class="tb" id="mx"></table></div>
+  </div>
+
+  <div class="blk">
+    <h2>Ngạch — theo vị trí công việc</h2>
+    <div class="scroll"><table class="tb">
+      <tr><th>Ngạch</th><th>Tên ngạch</th><th>Cộng thêm</th><th>Làm được gì thì vào ngạch này</th></tr>
+      <tr><td class="rh">I</td><td>Hỗ trợ – phụ việc</td><td class="n">0</td><td>Làm theo hướng dẫn từng bước, chưa tự ra được một công đoạn trọn vẹn.</td></tr>
+      <tr><td class="rh">II</td><td>Thợ chính – nhân viên nghiệp vụ</td><td class="n">500.000</td><td>Tự làm trọn một công đoạn đạt chất lượng, không cần kèm.</td></tr>
+      <tr><td class="rh">III</td><td>Kỹ sư – chuyên viên</td><td class="n">1.200.000</td><td>Chịu trách nhiệm chuyên môn: thiết kế, lập trình, quyết định kỹ thuật, ký số liệu.</td></tr>
+      <tr><td class="rh">IV</td><td>Chuyên gia – quản lý cấp cao</td><td class="n">2.250.000</td><td>Đặt chuẩn cho người khác làm theo, chịu trách nhiệm kết quả của cả mảng.</td></tr>
+      <tr><td class="rh">V</td><td>Giám đốc – người đại diện pháp luật</td><td class="n">4.650.000</td><td>Chịu trách nhiệm toàn bộ trước pháp luật.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="blk">
+    <h2>Bậc năng lực — theo kết quả chấm</h2>
+    <div class="scroll"><table class="tb">
+      <tr><th>Bậc</th><th>Cộng thêm</th><th>Điều kiện đạt bậc</th></tr>
+      <tr><td class="rh">B1 – Biết việc</td><td class="n">0</td><td>Làm được khi có người chỉ.</td></tr>
+      <tr><td class="rh">B2 – Thành thạo</td><td class="n">550.000</td><td>Tự làm trọn một công đoạn đạt chất lượng, không cần kèm.</td></tr>
+      <tr><td class="rh">B3 – Vững nghề</td><td class="n">1.400.000</td><td>Xử lý được việc khó, đọc được bản vẽ phức tạp, tự xử lý sai hỏng.</td></tr>
+      <tr><td class="rh">B4 – Chuyên sâu</td><td class="n">2.750.000</td><td>Đặt chuẩn cho người khác làm theo; được giao việc khó nhất của nghề.</td></tr>
+      <tr><td class="rh">B5 – Dẫn dắt nghề</td><td class="n">4.800.000</td><td>Đào tạo được lớp sau; cải tiến được quy trình, giảm được giờ trên mỗi sản phẩm.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="blk">
+    <h2>Thưởng đa năng theo tháng</h2>
+    <p class="hint">Mỗi nhóm công đoạn ngoài chuyên môn chính, tính theo số giờ định mức làm được trên thẻ công việc trong tháng. Không thuộc lương cấp bậc, không đóng bảo hiểm.</p>
+    <div class="scroll"><table class="tb">
+      <tr><th>Mức</th><th>Giờ định mức trong tháng</th><th>Tiền / nhóm</th><th>Ghi chú</th></tr>
+      <tr><td class="rh">Tham gia</td><td>Từ 4 giờ</td><td class="n">150.000</td><td>Tối đa tính 3 nhóm một tháng</td></tr>
+      <tr><td class="rh">Làm được</td><td>Từ 16 giờ</td><td class="n">300.000</td><td>Không tính nhóm chuyên môn chính</td></tr>
+      <tr><td class="rh">Làm chính</td><td>Từ 40 giờ</td><td class="n">500.000</td><td>Thẻ nhiều người: chia đều giờ</td></tr>
+      <tr><td class="rh">Kèm người</td><td>Đã kèm được người khác đạt từ mức “Làm được”, có xác nhận</td><td class="n">+300.000</td><td>Cộng thêm cho nhóm đó</td></tr>
+    </table></div>
+  </div>
+
+  <div class="blk">
+    <h2>Thưởng quản lý theo kết quả chung</h2>
+    <p class="hint">Mức chuẩn theo vai trò và năng lực quản lý, không theo số người. Hằng tháng nhận = mức chuẩn × hệ số kết quả chung (tổng điểm thợ trực tiếp ÷ tổng ngưỡng, tối đa 1,2) × ngày công. Không thuộc lương cấp bậc, không đóng bảo hiểm.</p>
+    <div class="scroll"><table class="tb">
+      <tr><th>Bậc QL</th><th>Vai trò</th><th>Điều kiện</th><th>Mức chuẩn / tháng</th></tr>
+      <tr><td class="rh">QL1</td><td>Kế cận, tổ phó</td><td>—</td><td class="n">0</td></tr>
+      <tr><td class="rh">QL2</td><td>Phụ trách tổ, nhóm việc</td><td>Bậc năng lực B3</td><td class="n">1.500.000</td></tr>
+      <tr><td class="rh">QL3</td><td>Phụ trách tổ, nhóm việc</td><td>Từ bậc B4; tổ bình quân từ 85% ngưỡng</td><td class="n">3.000.000</td></tr>
+      <tr><td class="rh">QL4</td><td>Trưởng bộ phận, quản đốc</td><td>Ít nhất 2 cấp dưới là quản lý; từ bậc B4</td><td class="n">5.000.000</td></tr>
+      <tr><td class="rh">QL5</td><td>Giám đốc, điều hành</td><td>Toàn bộ</td><td class="n">5.000.000</td></tr>
+    </table></div>
+    <ul class="rules" style="margin-top:12px">
+      <li>Tổ trưởng hưởng đủ khi có <b>từ 16 giờ quản lý có chứng cứ</b> trên thẻ công việc trong tháng (giao việc, hướng dẫn, theo dõi, nghiệm thu, tạo việc, yêu cầu mua vật tư; thẻ bảng quản lý riêng). Dưới mức này hưởng theo tỷ lệ giờ.</li>
+      <li>Tổ trưởng quản trực tiếp <b>tối đa 12 người</b> — vượt thì chia tổ hoặc bổ nhiệm tổ phó, không tăng mức thưởng.</li>
+      <li>Thôi chức thì thôi hưởng từ tháng kế tiếp, nhưng <b>không tụt ngạch, không tụt bậc</b>.</li>
+      <li>Chưa đủ bậc năng lực của bậc quản lý (QL2 cần B3; QL3, QL4 cần B4) thì tính theo mức của bậc được phép.</li>
+      <li>Ví dụ tổ trưởng QL3: kết quả chung đạt 90% ngưỡng nhận 2.700.000 đồng; đạt 64% nhận 1.920.000 đồng.</li>
+      <li>Phần quỹ quản lý của tổ trưởng <b>không vượt bình quân điểm một tổ viên</b>. Tổ làm đạt ngưỡng thì được đủ, tổ làm thấp thì giảm theo, tổ có lỗi lọt tới khách thì giảm thêm; phần giảm được chia lại cho mọi người qua đơn giá điểm.</li>
+    </ul>
+  </div>
+
+  <div class="blk">
+    <h2>Quỹ lương lấy từ đâu</h2>
+    <ul class="rules">
+      <li>Mỗi sản phẩm có định mức giờ công cho từng công đoạn theo Bảng định mức. Công đoạn làm xong được ghi nhận đủ giờ định mức, <b>kể cả khi sản phẩm chưa giao</b>.</li>
+      <li>Quỹ lương của tháng = số giờ định mức làm xong × đơn giá một giờ định mức.</li>
+      <li>Quỹ trả trước các khoản cố định (lương cấp bậc, bảo hiểm công ty đóng, tiền làm thêm giờ, tiền cơm, các phụ cấp, thưởng cải tiến). Phần còn lại là thưởng hiệu suất: <b>70% chia ngay trong tháng</b> theo điểm của từng người, <b>30% để dành</b> thưởng cuối năm.</li>
+      <li>Tháng làm ra chưa đủ trả các khoản cố định thì tháng đó không có thưởng hiệu suất, phần thiếu được bù từ các tháng sau. Lương cấp bậc, bảo hiểm, tiền làm thêm giờ, phụ cấp và thưởng cải tiến <b>vẫn trả đủ</b>.</li>
+      <li>Đầu mỗi tháng và hằng tuần được công bố: số giờ định mức cần làm xong để đủ trả các khoản cố định (mức hoà vốn) và số giờ đã làm được. Mỗi giờ định mức làm vượt mức hoà vốn, anh em được chia thêm khoảng <b>96.000 đồng</b> ngay trong tháng.</li>
+    </ul>
+  </div>
+
+  <div class="blk">
+    <h2>Ghi nhận công bằng — kiểm tra chéo</h2>
+    <ul class="rules">
+      <li>Thẻ công việc chỉ được tính điểm khi đủ 3 dấu hiệu: <b>đã đánh dấu hoàn tất</b>, <b>có lịch sử đánh dấu</b>, <b>danh sách việc cần làm trên thẻ xong 100%</b>. Thẻ tạo từ ngày áp dụng quy chế phải có danh sách việc cần làm; thẻ tạo trước đó chưa có danh sách thì tính khi đủ 2 dấu hiệu đầu.</li>
+      <li>Người làm được ghi theo nhãn tên trên thẻ. Thẻ kiểm tra chất lượng không ghi người làm thì tính cho người đăng thẻ.</li>
+      <li>Điểm trong tháng của mỗi người <b>không vượt số giờ đi làm thực tế</b> (ngày công × 8 giờ), để không dồn việc tháng trước sang tháng sau.</li>
+      <li>Lỗi do khâu sau và kiểm tra chất lượng ghi nhận, không do tổ trưởng của người làm ra lỗi. Người phát hiện lỗi của khâu trước được thưởng theo loại lỗi trên mỗi sản phẩm: <b>lỗi nhẹ 20.000, lỗi thường 50.000, lỗi nặng 200.000 đồng, tối đa 300.000 đồng một sản phẩm</b>. Phiếu lỗi phải ghi rõ tên lỗi. <b>Người làm ra lỗi không bị trừ tiền.</b></li>
+      <li>Việc phải làm lại do lỗi của chính mình thì lần làm lại không tính điểm; điểm đã trả lần đầu không bị thu hồi, không trừ lương.</li>
+      <li>Lỗi lọt tới khách tính nặng <b>gấp 3 lần</b> lỗi phát hiện tại chỗ; đã được báo mà không xử lý để lọt tới khách tính <b>gấp 5 lần</b>. Hệ số này chỉ dùng khi xét bậc, không trừ tiền.</li>
+    </ul>
+  </div>
+
+  <div class="blk">
+    <h2>Khi nào lương cấp bậc thay đổi</h2>
+    <div class="scroll"><table class="tb">
+      <tr><th>TT</th><th>Trường hợp</th><th>Thay đổi phần nào</th><th>Văn bản</th></tr>
+      <tr><td class="rh">a</td><td>Kết quả chấm năng lực kỳ mới — 2 kỳ một năm: chấm tháng 3 và tháng 9, áp dụng tháng 4 và tháng 10</td><td>Bậc</td><td>Phiếu chấm + quyết định xếp bậc</td></tr>
+      <tr><td class="rh">b</td><td>Chuyển vị trí công việc</td><td>Ngạch</td><td>Quyết định chuyển vị trí</td></tr>
+      <tr><td class="rh">c</td><td>Bổ nhiệm hoặc miễn nhiệm quản lý</td><td>Bậc quản lý — mức thưởng quản lý</td><td>Quyết định bổ nhiệm / miễn nhiệm</td></tr>
+    </table></div>
+    <p class="tx" style="margin-top:10px">Xuống bậc phải <b>báo trước 30 ngày</b> và có biên bản làm việc với người lao động.</p>
+  </div>
+
+  <div class="blk">
+    <h2>Bảo đảm cho người lao động</h2>
+    <ul class="rules">
+      <li>Lương cấp bậc là <b>sàn theo hợp đồng</b> — không có điểm vẫn nhận đủ theo ngày công.</li>
+      <li>Thưởng hiệu suất tính theo điểm đã chốt và đơn giá điểm công bố của tháng.</li>
+      <li><b>Không phạt tiền, không trừ lương</b> thay việc xử lý kỷ luật.</li>
+      <li>Mỗi người được xem điểm, thưởng của mình và công thức tính, có quyền ghi ý kiến <b>trong 5 ngày</b> kể từ ngày nhận lương.</li>
+      <li>Kết quả xếp của từng người được lập thành biên bản thoả thuận xếp ngạch, bậc lương riêng cho từng người, giao tận tay và ký riêng. Thông tin lương của mỗi người <b>được bảo mật, không công bố chung</b>.</li>
+      <li>Thưởng cuối năm: chia từ phần quỹ để dành theo điểm cả năm, trả trong kỳ lương tháng 12. Người quản lý được thêm thưởng theo lợi nhuận khi năm có lãi.</li>
+    </ul>
+  </div>
+
+  <footer>
+    Trang <b>thử tính</b>, dùng để tham khảo. Số chính thức là bảng lương được phát.
+    Trang không gửi dữ liệu đi đâu — mọi số bạn nhập chỉ nằm trong máy của bạn.
+  </footer>
+</section>
+</div>
+
+<div class="bar"><div class="in">
+  <div class="k">Tạm tính thực nhận<s id="barSub">—</s></div>
+  <div class="m" id="barTot">0</div>
+  <a href="#res">Chi tiết</a>
+</div></div>
+
+<script>
+"use strict";
+var BASE=6000000;
+var NGACH=[["I",0,"Hỗ trợ"],["II",500000,"Thợ chính"],["III",1200000,"Kỹ sư"],["IV",2250000,"Chuyên gia"],["V",4650000,"Giám đốc"]];
+var BAC=[["B1",0,"Biết việc"],["B2",550000,"Thành thạo"],["B3",1400000,"Vững nghề"],["B4",2750000,"Chuyên sâu"],["B5",4800000,"Dẫn dắt"]];
+var NGACH_FULL=["Hỗ trợ – phụ việc","Thợ chính – nhân viên nghiệp vụ","Kỹ sư – chuyên viên","Chuyên gia – quản lý cấp cao","Giám đốc – người đại diện pháp luật"];
+var BAC_FULL=["Biết việc — làm được khi có người chỉ","Thành thạo — tự làm trọn một công đoạn","Vững nghề — xử lý được việc khó","Chuyên sâu — đặt chuẩn cho người khác","Dẫn dắt nghề — đào tạo lớp sau, cải tiến quy trình"];
+var QL=[["—",0,"không"],["QL1",0,"tổ phó"],["QL2",1500000,"1,5 tr"],["QL3",3000000,"3 tr"],["QL4",5000000,"5 tr"],["QL5",5000000,"5 tr"]];
+var QL_MINBAC=[0,0,2,3,3,0];
+var DN=[["—",0],["Tham gia",150000],["Làm được",300000],["Làm chính",500000]];
+var TEAM=[["Không",0],["Đạt 2",150000],["Đạt 3",300000]];
+
+var S={ngach:0,bac:0,ql:0,team:0,dn:[{m:0,k:false},{m:0,k:false},{m:0,k:false}]};
+function $(id){return document.getElementById(id)}
+function vnd(n){return Math.round(n||0).toLocaleString("vi-VN")}
+
+function seg(box,items,get,set){
+  box.innerHTML="";
+  items.forEach(function(it,i){
+    var b=document.createElement("button");
+    b.type="button";
+    b.innerHTML="<em>"+it[0]+"</em>"+(it[2]?"<small>"+it[2]+"</small>":"");
+    b.setAttribute("aria-pressed",get()===i?"true":"false");
+    b.onclick=function(){set(i);seg(box,items,get,set);calc();save()};
+    box.appendChild(b);
+  });
+}
+function buildDN(){
+  var w=$("dnWrap");w.innerHTML="";
+  for(var i=0;i<3;i++)(function(i){
+    var d=document.createElement("div");d.className="grp";
+    d.innerHTML='<div class="gh"><span>Nhóm '+(i+1)+'</span><span id="dnv'+i+'">0</span></div>';
+    var s=document.createElement("div");s.className="seg c4";s.style.marginBottom="8px";
+    d.appendChild(s);
+    var l=document.createElement("label");l.className="chk";l.style.margin="0";
+    l.innerHTML='<input type="checkbox"><span class="t">Đã kèm được người khác<s>Có xác nhận</s></span><span class="v">+300.000</span>';
+    var ip=l.querySelector("input");
+    ip.checked=S.dn[i].k;
+    ip.onchange=function(){S.dn[i].k=this.checked;calc();save()};
+    d.appendChild(l);w.appendChild(d);
+    seg(s,DN.map(function(x){return [x[0],0,x[1]?vnd(x[1]):""]}),function(){return S.dn[i].m},function(v){S.dn[i].m=v});
+  })(i);
+}
+
+function num(id){var v=parseFloat($(id).value);return isNaN(v)||v<0?0:v}
+
+function calc(){
+  var luongCapBac=BASE+NGACH[S.ngach][1]+BAC[S.bac][1];
+  var nc=num("ngayCong"), ncc=num("ngayChuan")||1;
+  var tyLe=nc/ncc;
+  var luongNgayCong=luongCapBac*tyLe;
+
+  $("gioThucTe").value=Math.round(nc*8);
+  var diem=num("diem"), donGia=num("donGia");
+  var tranDiem=nc*8, diemVuot=diem>tranDiem;
+  var diemTinh=Math.min(diem,tranDiem);
+  var hieuSuat=diemTinh*donGia;
+
+  var daNang=0,dnSo=0,i;
+  for(i=0;i<3;i++){
+    var t=DN[S.dn[i].m][1]+(S.dn[i].m>0&&S.dn[i].k?300000:0);
+    if(S.dn[i].m>0)dnSo++;
+    daNang+=t;
+    var el=$("dnv"+i); if(el)el.textContent=vnd(t);
+  }
+
+  var qlIdx=S.ql, qlHa=false;
+  while(qlIdx>0 && S.bac<QL_MINBAC[qlIdx]){qlIdx--;qlHa=true}
+  var mucQL=QL[qlIdx][1];
+  var hsX=Math.min(num("heSoXuong"),120)/100;
+  var hsGio=Math.min(num("gioQL")/16,1);
+  var quanLy=mucQL*hsX*Math.min(tyLe,1)*hsGio;
+
+  var donGiaGio=luongCapBac/(ncc*8);
+  var h3=num("ot3"),h2=num("ot2"),h1=num("ot1");
+  var con=40;
+  var p3=Math.min(h3,con); con-=p3;
+  var p2=Math.min(h2,con); con-=p2;
+  var p1=Math.min(h1,con); con-=p1;
+  var otVuot=(h1+h2+h3)-(p1+p2+p3);
+  var ot=donGiaGio*(p1*1.5+p2*2+p3*3);
+
+  var com=num("buaCom")*30000;
+  var ctrinh=num("congTrinh");
+  var cc=$("chuyenCan").checked?200000:0;
+  var dt=$("dienThoai").checked?200000:0;
+  var caiTien=num("ctA")*1000000+num("ctB")*300000+num("ctC")*100000;
+  var doiNhom=TEAM[S.team][1];
+  var phatLoi=num("loiNhe")*20000+num("loiTB")*50000+num("loiNang")*200000;
+
+  var tong=luongNgayCong+hieuSuat+daNang+quanLy+ot+com+ctrinh+cc+dt+caiTien+doiNhom+phatLoi;
+  var bhDu=luongCapBac*0.105;
+  var bh=$("bh").checked?bhDu:0;
+  $("bhV").textContent=vnd(bhDu);
+  var thucNhan=tong-bh;
+
+  var L=[
+    ["Lương cấp bậc","Ngạch "+NGACH[S.ngach][0]+" · Bậc "+BAC[S.bac][0]+" = "+vnd(luongCapBac)+" đ"+(Math.abs(tyLe-1)>0.001?"  ×  "+nc+"/"+ncc+" ngày":""),luongNgayCong,true],
+    ["Thưởng hiệu suất",vnd(diemTinh)+" điểm × "+vnd(donGia)+" đ",hieuSuat,true],
+    ["Thưởng đa năng",dnSo?dnSo+" nhóm":"",daNang,false],
+    ["Thưởng quản lý",qlIdx?QL[qlIdx][0]+" "+vnd(mucQL)+" đ × "+Math.round(hsX*100)+"%"+(hsGio<1?" × "+Math.round(hsGio*100)+"% giờ QL":""):"",quanLy,false],
+    ["Làm thêm giờ",(p1+p2+p3)?(p1+p2+p3)+" giờ được trả · "+vnd(donGiaGio)+" đ/giờ":"",ot,false],
+    ["Tiền cơm",num("buaCom")?num("buaCom")+" bữa × 30.000 đ":"",com,false],
+    ["Hỗ trợ đi công trình","",ctrinh,false],
+    ["Thưởng chuyên cần","",cc,false],
+    ["Khoán điện thoại","",dt,false],
+    ["Thưởng cải tiến",caiTien?"A "+num("ctA")+" · B "+num("ctB")+" · C "+num("ctC"):"",caiTien,false],
+    ["Thưởng đội nhóm",doiNhom?TEAM[S.team][0]+" chỉ tiêu":"",doiNhom,false],
+    ["Thưởng phát hiện lỗi","",phatLoi,false]
+  ];
+  var html="";
+  L.forEach(function(r){
+    html+='<div class="line'+(r[2]<=0&&!r[3]?" zero":"")+'"><span class="n">'+r[0]+(r[1]?"<s>"+r[1]+"</s>":"")+'</span><span class="v">'+vnd(r[2])+"</span></div>";
+  });
+  html+='<div class="line sub"><span class="n">TỔNG THU NHẬP</span><span class="v">'+vnd(tong)+"</span></div>";
+  if(bh>0)html+='<div class="line"><span class="n">Trừ bảo hiểm 10,5%<s>trên lương cấp bậc đủ tháng</s></span><span class="v">− '+vnd(bh)+"</span></div>";
+  html+='<div class="line tot"><span class="n">TẠM TÍNH<br>THỰC NHẬN</span><span class="v">'+vnd(thucNhan)+"</span></div>";
+  $("lines").innerHTML=html;
+
+  var f="";
+  if(donGia<=0&&diem>0)f+='<div class="flag">Chưa nhập đơn giá điểm của tháng này nên thưởng hiệu suất đang bằng 0.</div>';
+  if(diemVuot)f+='<div class="flag">Điểm trong tháng không được vượt số giờ đi làm thực tế ('+Math.round(tranDiem)+" giờ). Đang tính "+Math.round(tranDiem)+" điểm.</div>";
+  if(otVuot>0)f+='<div class="flag">Làm thêm '+(h1+h2+h3)+" giờ, vượt trần 40 giờ. "+(Math.round(otVuot*10)/10)+" giờ vượt không trả tiền làm thêm — kết quả làm được trong số giờ đó tính vào thưởng hiệu suất. Trang này ưu tiên trả giờ có hệ số cao trước.</div>";
+  if(qlHa)f+='<div class="flag">Chưa đủ bậc năng lực cho '+QL[S.ql][0]+" (QL2 cần B3; QL3, QL4 cần B4) nên tính theo mức của "+(qlIdx?QL[qlIdx][0]:"không quản lý")+".</div>";
+  var ng=num("nguong");
+  if(ng>0){
+    var pc=Math.round(diemTinh/ng*100);
+    var t="Đạt <b>"+pc+"%</b> ngưỡng ("+vnd(diemTinh)+" / "+vnd(ng)+" điểm). ";
+    if(pc<50)t+="Dưới 50% ngưỡng 3 tháng liên tiếp là một căn cứ xét xuống bậc — phải báo trước 30 ngày và có biên bản.";
+    else if(pc>=100)t+="Từ ngưỡng trở lên; xét lên bậc còn cần chấm năng lực đạt và đủ thời gian ở bậc hiện tại.";
+    else t+="Trên 50% ngưỡng.";
+    f+='<div class="flag">'+t+"</div>";
+  }
+  $("flags").innerHTML=f;
+
+  $("barTot").textContent=vnd(thucNhan);
+  $("barSub").textContent="Ngạch "+NGACH[S.ngach][0]+" · "+BAC[S.bac][0]+(qlIdx?" · "+QL[qlIdx][0]:"");
+  $("capNgach").textContent="Ngạch "+NGACH[S.ngach][0]+" — "+NGACH_FULL[S.ngach]+" · cộng "+vnd(NGACH[S.ngach][1])+" đ";
+  $("capBac").textContent="Bậc "+BAC[S.bac][0]+" — "+BAC_FULL[S.bac]+" · cộng "+vnd(BAC[S.bac][1])+" đ";
+  $("capQL").textContent=S.ql?QL[S.ql][0]+" · mức chuẩn "+vnd(QL[S.ql][1])+" đ/tháng":"Không giữ vai trò quản lý";
+  paintMatrix();
+}
+
+function paintMatrix(){
+  var h="<tr><th>Ngạch</th>";
+  BAC.forEach(function(b){h+="<th>"+b[0]+"</th>"});
+  h+="</tr>";
+  NGACH.forEach(function(n,i){
+    h+="<tr"+(i===S.ngach?' class="me"':"")+'><td class="rh">'+n[0]+" – "+n[2]+"</td>";
+    BAC.forEach(function(b,j){
+      var v=BASE+n[1]+b[1];
+      var me=(i===S.ngach&&j===S.bac);
+      h+='<td class="n"'+(me?' style="background:#0f0e12;color:#fff"':"")+">"+vnd(v)+"</td>";
+    });
+    h+="</tr>";
+  });
+  $("mx").innerHTML=h;
+}
+
+function tab(n){
+  $("s1").className=n===1?"on":"";
+  $("s2").className=n===2?"on":"";
+  $("t1").setAttribute("aria-selected",n===1);
+  $("t2").setAttribute("aria-selected",n===2);
+  window.scrollTo(0,0);
+}
+var IDS=["ngayCong","ngayChuan","diem","donGia","nguong","heSoXuong","gioQL","ot1","ot2","ot3","buaCom","congTrinh","ctA","ctB","ctC","loiNhe","loiTB","loiNang"];
+var CHK=["chuyenCan","dienThoai","bh"];
+function save(){
+  var d={S:S,v:{},c:{}};
+  IDS.forEach(function(i){d.v[i]=$(i).value});
+  CHK.forEach(function(i){d.c[i]=$(i).checked});
+  try{localStorage.setItem("thutinhluong",JSON.stringify(d))}catch(e){}
+}
+function load(){
+  try{
+    var d=JSON.parse(localStorage.getItem("thutinhluong"));
+    if(!d)return;
+    if(d.S&&d.S.dn&&d.S.dn.length===3)S=d.S;
+    IDS.forEach(function(i){if(d.v&&d.v[i]!=null)$(i).value=d.v[i]});
+    CHK.forEach(function(i){if(d.c&&d.c[i]!=null)$(i).checked=d.c[i]});
+  }catch(e){}
+}
+function reset(){
+  try{localStorage.removeItem("thutinhluong")}catch(e){}
+  location.reload();
+}
+
+load();
+seg($("segNgach"),NGACH.map(function(x){return [x[0],0,x[2]]}),function(){return S.ngach},function(v){S.ngach=v});
+seg($("segBac"),BAC.map(function(x){return [x[0],0,x[2]]}),function(){return S.bac},function(v){S.bac=v});
+seg($("segQL"),QL.map(function(x){return [x[0],0,x[2]]}),function(){return S.ql},function(v){S.ql=v});
+seg($("segTeam"),TEAM.map(function(x){return [x[0],0,x[1]?vnd(x[1]):""]}),function(){return S.team},function(v){S.team=v});
+buildDN();
+IDS.concat(CHK).forEach(function(i){
+  $(i).addEventListener("input",function(){calc();save()});
+  $(i).addEventListener("change",function(){calc();save()});
+});
+calc();
+</script>
+</body>
+</html>
